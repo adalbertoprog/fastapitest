@@ -1,7 +1,7 @@
 import random
 from fastapi import APIRouter, FastAPI, Response, status, HTTPException, Body
 from app.models.article_model import Article
-from app.core.data import my_articles, find_article, find_article_index
+from app.core.data import my_articles
 
 
 router = APIRouter()

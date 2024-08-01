@@ -11,7 +11,6 @@ def find_author(id):
 
 @router.get("/authors")
 def read_authors():
-    
     return {"data": authors}
 
 

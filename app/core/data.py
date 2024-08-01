@@ -11,3 +11,8 @@ authors = [
     {"name": "author 3", "email": "email 3", "id": 3},
 ]
 
+listCategory = [
+    CategoryModel(id=1, name="category 1"),
+    CategoryModel(id=2, name="category 2"),
+    CategoryModel(id=3, name="category 3"),
+]
