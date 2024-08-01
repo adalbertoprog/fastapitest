@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from app.data import authors
+from app.core.data import authors
 from app.models.author import Author
 
 router = APIRouter()

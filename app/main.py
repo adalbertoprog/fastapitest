@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from app import endpoints
 from app.endpoints.author import router as author_router
 
 

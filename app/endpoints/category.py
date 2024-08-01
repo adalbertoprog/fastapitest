@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.data import listCategory
+from app.core.data import listCategory
 
 router = APIRouter()
 

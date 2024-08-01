@@ -1,37 +1,49 @@
 import random
-from fastapi import FastAPI, Response, status, HTTPException, Body
-from app.article_model import Article
-from app.data import my_articles, find_article, find_article_index
+from fastapi import APIRouter, FastAPI, Response, status, HTTPException, Body
+from app.models.article_model import Article
+from app.core.data import my_articles, find_article, find_article_index
 
 
-app = FastAPI()
-@app.post("/articlesdd")
+router = APIRouter()
+
+
+def find_article(id):
+    for p in my_articles:
+        if p["id"] == id:
+            return p
+        
+def find_article_index(id):
+    for i, p in enumerate(my_articles):
+        if p['id'] == id:
+            return i
+        
+@router.post("/articlesdd")
 def create_articles(article: dict = Body(...)):
     print(article)
     return {"new_item": f"title: {article['title']} content: {article['content']}"}
 
-@app.get("/articles")
+@router.get("/articles")
 def get_articles():
     return {"data": my_articles}
 
-@app.post("/postsa")
+@router.post("/postsa")
 def create_new_article(article: Article):
     print(article)
     return {"post": "new post has been created"}
 
-@app.post("/posts_pydantic")
+@router.post("/posts_pydantic")
 def new_article_pydantic(article: Article):
     print(article.dict())
     return {"data": article}
 
-@app.post("/posts", status_code=status.HTTP_201_CREATED)
+@router.post("/posts", status_code=status.HTTP_201_CREATED)
 def new_article_pydantic(article: Article):
     new_article = article.dict()
     new_article['id'] = random.randrange(0, 1000000)
     my_articles.append(new_article)
     return {"data": new_article}
 
-@app.get("/posts/{id}")
+@router.get("/posts/{id}")
 def get_article(id: int, response: Response):
     print(id)
     if not find_article(id):
@@ -40,7 +52,7 @@ def get_article(id: int, response: Response):
     else:
         return {"data": find_article(id)}
 
-@app.get("/postshttp/{id}") 
+@router.get("/postshttp/{id}") 
 def get_article(id: int):
     post = find_article(id)
     if not post:
@@ -49,7 +61,7 @@ def get_article(id: int):
         print(find_article_index(id))
         return {"data": post}
 
-@app.delete("/posts/{id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/posts/{id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_article(id: int):
     index = find_article_index(id)
     if not index:
