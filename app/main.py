@@ -4,7 +4,7 @@ from app.endpoints.author import router as author_router
 
 app = FastAPI()
 
-app.include_router(author_router)
+app.include_router(category_router)
 
 @app.get("/")
 def read_root():

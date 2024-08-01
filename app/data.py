@@ -1,3 +1,5 @@
+from app.category_model import CategoryModel
+
 my_articles = [
     {"title": "title of article 1", "content": "content of article 1", "id": 1},
     {"title": "title of article 2", "content": "content of article 2", "id": 2}
