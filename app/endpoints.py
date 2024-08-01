@@ -1,10 +1,10 @@
 import random
-from fastapi import Response, status, HTTPException, Body
+from fastapi import FastAPI, Response, status, HTTPException, Body
 from app.article_model import Article
 from app.data import my_articles, find_article, find_article_index
 
 
-
+app = FastAPI()
 @app.post("/articlesdd")
 def create_articles(article: dict = Body(...)):
     print(article)
