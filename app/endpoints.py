@@ -1,9 +1,9 @@
 import random
 from fastapi import Response, status, HTTPException, Body
-from article_model import Article
-from data import my_articles, find_article, find_article_index
+from app.article_model import Article
+from app.data import my_articles, find_article, find_article_index
 
-from main import app
+
 
 @app.post("/articlesdd")
 def create_articles(article: dict = Body(...)):
