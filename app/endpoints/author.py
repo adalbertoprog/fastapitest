@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, status
 from app.core.data import authors
 from app.models.author import Author
 
@@ -23,7 +23,7 @@ def read_author(id: int):
     
 
 #create author with Pydantic
-@router.post("/authors")
+@router.post("/authors", status_code=status.HTTP_201_CREATED)
 def create_author(author: Author):
     new_author = author.dict()
     new_author["id"] = len(authors) + 1
