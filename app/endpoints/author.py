@@ -30,6 +30,16 @@ def create_author(author: Author):
     authors.append(new_author)
     return {"data": new_author}
 
+@router.put("/authors/{id}")
+def update_author(id: int, author: Author):
+    index = find_author(id)
+    if not index:
+        raise HTTPException(status_code=404, detail="Author not found")
+    else:
+        authors[index] = author
+        return {"data": author}
+
+
 
 
 #delete author
