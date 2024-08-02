@@ -8,6 +8,11 @@ def find_author(id):
     for author in authors:
         if author["id"] == id:
             return author
+        
+def find_author_index(id):
+    for i, author in enumerate(authors):
+        if author['id'] == id:
+            return i
 
 @router.get("/authors")
 def read_authors():
@@ -32,20 +37,17 @@ def create_author(author: Author):
 
 @router.put("/authors/{id}")
 def update_author(id: int, author: Author):
-    index = find_author(id)
+    index = find_author_index(id)
     if not index:
         raise HTTPException(status_code=404, detail="Author not found")
     else:
         authors[index] = author
         return {"data": author}
 
-
-
-
 #delete author
 @router.delete("/authors/{id}")
 def delete_author(id: int):
-    index = find_author(id)
+    index = find_author_index(id)
     if not index:
         raise HTTPException(status_code=404, detail="Author not found")
     else:
