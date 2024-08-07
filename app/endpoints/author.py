@@ -1,55 +1,61 @@
-from fastapi import APIRouter, HTTPException, status
-from app.core.data import authors
-from app.models.author import Author
+from typing import Optional
+from fastapi import APIRouter, HTTPException, Response, status, Depends
+from pydantic import BaseModel
+from sqlalchemy.orm import Session
+
+from app.database import get_db
+from .. import models
+
 
 router = APIRouter()
 
-def find_author(id):
-    for author in authors:
-        if author["id"] == id:
-            return author
-        
-def find_author_index(id):
-    for i, author in enumerate(authors):
-        if author['id'] == id:
-            return i
+#author pydantic model
+class Author(BaseModel):
+    name: str
+    email: str
+    bio: Optional[str]
+
 
 @router.get("/authors")
-def read_authors():
+def read_authors(db: Session = Depends(get_db)):
+    authors = db.query(models.Author).all()
     return {"data": authors}
+
+#create author
+@router.post("/authors", status_code=status.HTTP_201_CREATED)
+def create_author(author: Author, db: Session = Depends(get_db)):
+    new_author = models.Author(name=author.name, email=author.email, bio=author.bio)
+    db.add(new_author)
+    db.commit()
+    db.refresh(new_author)
+    return {"data": new_author}
 
 
 @router.get("/authors/{id}")
-def read_author(id: int):
-    if not find_author(id):
+def read_author(id: int, db: Session = Depends(get_db)):
+    author = db.query(models.Author).filter(models.Author.id == id).first()
+    if not author:
         raise HTTPException(status_code=404, detail="Author not found")
     else:
-        return {"data": find_author(id)}
-    
-
-#create author with Pydantic
-@router.post("/authors", status_code=status.HTTP_201_CREATED)
-def create_author(author: Author):
-    new_author = author.dict()
-    new_author["id"] = len(authors) + 1
-    authors.append(new_author)
-    return {"data": new_author}
-
-@router.put("/authors/{id}")
-def update_author(id: int, author: Author):
-    index = find_author_index(id)
-    if not index:
-        raise HTTPException(status_code=404, detail="Author not found")
-    else:
-        authors[index] = author
         return {"data": author}
 
-#delete author
-@router.delete("/authors/{id}")
-def delete_author(id: int):
-    index = find_author_index(id)
-    if not index:
+
+@router.put("/authors/{id}")
+def update_author(id: int, author: Author, db: Session = Depends(get_db)):
+    db_author = db.query(models.Author).filter(models.Author.id == id)
+    if not db_author.first():
         raise HTTPException(status_code=404, detail="Author not found")
     else:
-        authors.pop(index)
-        return {"message": "Author deleted"}
+        db_author.update(author.dict())
+        db.commit()
+        return {"data": author}
+
+@router.delete("/authors/{id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_author(id: int, db: Session = Depends(get_db)):
+    db_author = db.query(models.Author).filter(models.Author.id == id)
+    if db_author.first() == None:
+        raise HTTPException(status_code=404, detail="Author not found")
+    else:
+        db_author.delete()
+        db.commit()
+        return Response(status_code=status.HTTP_204_NO_CONTENT)
