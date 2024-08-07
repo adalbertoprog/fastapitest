@@ -1,6 +1,6 @@
 from .database import Base
 
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Boolean, Column, Integer, String
 
 class Author(Base):
     __tablename__ = "authors"
@@ -18,6 +18,8 @@ class Article(Base):
     title = Column(String)
     content = Column(String)
     author_id = Column(Integer)
+    category_id = Column(Integer)
+    published = Column(Boolean, default=True)
 
 class Category(Base):
     __tablename__ = "categories"

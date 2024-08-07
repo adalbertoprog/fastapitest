@@ -21,7 +21,7 @@ def read_authors(db: Session = Depends(get_db)):
     authors = db.query(models.Author).all()
     return {"data": authors}
 
-#create author
+
 @router.post("/authors", status_code=status.HTTP_201_CREATED)
 def create_author(author: Author, db: Session = Depends(get_db)):
     new_author = models.Author(name=author.name, email=author.email, bio=author.bio)
