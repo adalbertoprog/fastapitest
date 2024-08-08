@@ -2,6 +2,7 @@ from typing import Optional
 from fastapi import APIRouter, HTTPException, Response, status, Depends
 from sqlalchemy.orm import Session
 
+from app import oauth2
 from app.database import get_db
 from .. import models, schemas
 
@@ -14,13 +15,14 @@ router = APIRouter(
 
 
 @router.get("/", response_model=list[schemas.Article])
-def read_articles(db: Session = Depends(get_db)):
+def read_articles(db: Session = Depends(get_db), get_current_user: int = Depends(oauth2.get_current_user)):
     articles = db.query(models.Article).all()
     return articles
 
 
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=schemas.Article)
-def create_article(article: schemas.ArticleCreate, db: Session = Depends(get_db)):
+def create_article(article: schemas.ArticleCreate, db: Session = Depends(get_db), 
+                   get_current_user: int = Depends(oauth2.get_current_user)):
     new_article = models.Article(title=article.title, content=article.content, author=article.author, category=article.category, published=article.published)
     db.add(new_article)
     db.commit()

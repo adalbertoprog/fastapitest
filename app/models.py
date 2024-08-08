@@ -9,10 +9,10 @@ class Article(Base):
     id = Column(Integer, primary_key=True)
     title = Column(String)
     content = Column(String)
-    author_id = Column(Integer)
+    user_id = Column(Integer)
     category_id = Column(Integer)
     published = Column(Boolean, default=True)
-    created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=func.now())
+    #created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=func.now())
 
 class Category(Base):
     __tablename__ = "categories"
@@ -20,7 +20,7 @@ class Category(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String)
     description = Column(String, nullable=True)
-    created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=func.now())
+    #created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=func.now())
 
 class User(Base):
     __tablename__ = "users"

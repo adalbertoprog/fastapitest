@@ -5,8 +5,8 @@ from typing import Optional
 class ArticleBase(BaseModel):
     title: str
     content: str
-    author_id: int
-    category_id: str
+    user_id: int
+    category_id: int
     published: bool = True
 
 class ArticleCreate(ArticleBase):
@@ -59,3 +59,10 @@ class User(BaseModel):
 class UserLogin(BaseModel):
     email: EmailStr
     password: str
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+class TokenData(BaseModel):
+    id: Optional[int] = None
