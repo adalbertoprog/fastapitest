@@ -6,16 +6,19 @@ from app.database import get_db
 from .. import models, schemas
 
 
-router = APIRouter()
+router = APIRouter(
+    prefix="/categories",
+    tags = ["Categories"],
+)
 
 
-@router.get("/categories", response_model=list[schemas.Category])
+@router.get("/", response_model=list[schemas.Category])
 def loadCategories(db: Session = Depends(get_db)):
     categories = db.query(models.Category).all()
     return categories
 
 
-@router.post("/categories", status_code=status.HTTP_201_CREATED, response_model=schemas.Category)
+@router.post("/", status_code=status.HTTP_201_CREATED, response_model=schemas.Category)
 def addCategory(category: schemas.CategoryCreate, db: Session = Depends(get_db)):
     newCategory = models.Category(name=category.name, description=category.description)
     db.add(newCategory)
@@ -24,7 +27,7 @@ def addCategory(category: schemas.CategoryCreate, db: Session = Depends(get_db))
     return newCategory
 
 
-@router.get("/categories/{id}", response_model=schemas.Category)
+@router.get("/{id}", response_model=schemas.Category)
 def loadCategory(id: int, db: Session = Depends(get_db)):
     category = db.query(models.Category).filter(models.Category.id == id).first()
     if category == None:
@@ -33,7 +36,7 @@ def loadCategory(id: int, db: Session = Depends(get_db)):
         return category
 
 
-@router.put("/categories/{id}", response_model=schemas.Category)
+@router.put("/{id}", response_model=schemas.Category)
 def updateCategory(id: int, category: schemas.ArticleCreate, db: Session = Depends(get_db)):
     uCategory = db.query(models.Category).filter(models.Category.id == id)
     if not uCategory.first():
@@ -43,7 +46,7 @@ def updateCategory(id: int, category: schemas.ArticleCreate, db: Session = Depen
         db.commit()
         return category
 
-@router.delete("/categories/{id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
 def deleteCategory(id: int, db: Session = Depends(get_db)):
     category = db.query(models.Category).filter(models.Category.id == id)
     if category.first() == None:

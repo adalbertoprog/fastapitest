@@ -6,17 +6,20 @@ from app.database import get_db
 from .. import models, schemas
 
 
-router = APIRouter()
+router = APIRouter(
+    prefix="/articles",
+    tags = ["Articles"],
+)
 
 
 
-@router.get("/articles", response_model=list[schemas.Article])
+@router.get("/", response_model=list[schemas.Article])
 def read_articles(db: Session = Depends(get_db)):
     articles = db.query(models.Article).all()
     return articles
 
 
-@router.post("/articles", status_code=status.HTTP_201_CREATED, response_model=schemas.Article)
+@router.post("/", status_code=status.HTTP_201_CREATED, response_model=schemas.Article)
 def create_article(article: schemas.ArticleCreate, db: Session = Depends(get_db)):
     new_article = models.Article(title=article.title, content=article.content, author=article.author, category=article.category, published=article.published)
     db.add(new_article)
@@ -25,7 +28,7 @@ def create_article(article: schemas.ArticleCreate, db: Session = Depends(get_db)
     return new_article
 
 
-@router.get("/articles/{id}", response_model=schemas.Article)
+@router.get("/{id}", response_model=schemas.Article)
 def read_article(id: int, db: Session = Depends(get_db)):
     article = db.query(models.Article).filter(models.Article.id == id).first()
     if article == None:
@@ -34,7 +37,7 @@ def read_article(id: int, db: Session = Depends(get_db)):
         return article
     
 
-@router.put("/articles/{id}", response_model=schemas.Article)
+@router.put("/{id}", response_model=schemas.Article)
 def update_article(id: int, article: schemas.ArticleCreate, db: Session = Depends(get_db)):
     db_article = db.query(models.Article).filter(models.Article.id == id)
     if not db_article.first():
@@ -44,7 +47,7 @@ def update_article(id: int, article: schemas.ArticleCreate, db: Session = Depend
         db.commit()
         return article
 
-@router.delete("/articles/{id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_article(id: int, db: Session = Depends(get_db)):
     db_article = db.query(models.Article).filter(models.Article.id == id)
     if db_article.first() == None:

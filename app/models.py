@@ -9,7 +9,7 @@ class Author(Base):
     name = Column(String)
     email = Column(String, unique=True)
     bio = Column(String, nullable=True)
-    created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=func.now())
+    #created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=func.now())
 
 
 class Article(Base):
