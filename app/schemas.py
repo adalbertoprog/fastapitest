@@ -1,22 +1,6 @@
 from pydantic import BaseModel, EmailStr
 from typing import Optional
-class AuthorBase(BaseModel):
-    name: str
-    email: str
-    bio: Optional[str]
 
-class AuthorCreate(AuthorBase):
-    pass
-
-
-class Author(AuthorBase):
-    id: int
-
-    class Config:
-        orm_mode = True
-
-
-##################################################3
 
 class ArticleBase(BaseModel):
     title: str

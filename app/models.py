@@ -2,15 +2,6 @@ from .database import Base
 
 from sqlalchemy import TIMESTAMP, Boolean, Column, Integer, String, func
 
-class Author(Base):
-    __tablename__ = "authors"
-
-    id = Column(Integer, primary_key=True)
-    name = Column(String)
-    email = Column(String, unique=True)
-    bio = Column(String, nullable=True)
-    #created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=func.now())
-
 
 class Article(Base):
     __tablename__ = "articles"

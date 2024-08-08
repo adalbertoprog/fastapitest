@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 from app import models
 
-from app.endpoints.author import router as author_router
 from app.endpoints.article import router as article_router
 from app.endpoints.category import router as category_router
 from app.endpoints.user import router as user_router
@@ -13,7 +12,6 @@ models.Base.metadata.create_all(bind=engine)
 app = FastAPI()
 
 app.include_router(category_router)
-app.include_router(author_router)
 app.include_router(article_router)
 app.include_router(user_router)
 app.include_router(auth_router)
