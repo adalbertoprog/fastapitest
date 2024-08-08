@@ -27,7 +27,7 @@ def addCategory(category: schemas.CategoryCreate, db: Session = Depends(get_db))
 @router.get("/categories/{id}", response_model=schemas.Category)
 def loadCategory(id: int, db: Session = Depends(get_db)):
     category = db.query(models.Category).filter(models.Category.id == id).first()
-    if not category:
+    if category == None:
         raise HTTPException(status_code=404, detail="Category not found")
     else:
         return category

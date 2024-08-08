@@ -51,3 +51,23 @@ class Category(CategoryBase):
 
     class Config:
         orm_mode = True
+
+##################################################
+
+class UserBase(BaseModel):
+    name: str
+    email: str
+    password: str
+    
+
+class UserCreate(UserBase):
+    pass
+
+
+class User(BaseModel):
+    name: str
+    email: str
+    id: int
+
+    class Config:
+        orm_mode = True

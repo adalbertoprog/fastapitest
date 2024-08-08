@@ -28,7 +28,7 @@ def create_article(article: schemas.ArticleCreate, db: Session = Depends(get_db)
 @router.get("/articles/{id}", response_model=schemas.Article)
 def read_article(id: int, db: Session = Depends(get_db)):
     article = db.query(models.Article).filter(models.Article.id == id).first()
-    if not article:
+    if article == None:
         raise HTTPException(status_code=404, detail="Article not found")
     else:
         return article

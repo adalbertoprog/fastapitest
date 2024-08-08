@@ -28,7 +28,7 @@ def create_author(author: schemas.AuthorCreate, db: Session = Depends(get_db)):
 @router.get("/authors/{id}", response_model=schemas.Author)
 def read_author(id: int, db: Session = Depends(get_db)):
     author = db.query(models.Author).filter(models.Author.id == id).first()
-    if not author:
+    if author == None:
         raise HTTPException(status_code=404, detail="Author not found")
     else:
         return author

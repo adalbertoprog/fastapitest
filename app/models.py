@@ -1,6 +1,6 @@
 from .database import Base
 
-from sqlalchemy import Boolean, Column, Integer, String
+from sqlalchemy import TIMESTAMP, Boolean, Column, Integer, String, func
 
 class Author(Base):
     __tablename__ = "authors"
@@ -9,6 +9,7 @@ class Author(Base):
     name = Column(String)
     email = Column(String, unique=True)
     bio = Column(String, nullable=True)
+    created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=func.now())
 
 
 class Article(Base):
@@ -20,6 +21,7 @@ class Article(Base):
     author_id = Column(Integer)
     category_id = Column(Integer)
     published = Column(Boolean, default=True)
+    created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=func.now())
 
 class Category(Base):
     __tablename__ = "categories"
@@ -27,3 +29,13 @@ class Category(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String)
     description = Column(String, nullable=True)
+    created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=func.now())
+
+class User(Base):
+    __tablename__ = "users"
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    email = Column(String, unique=True)
+    password = Column(String)
+    created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=func.now())
