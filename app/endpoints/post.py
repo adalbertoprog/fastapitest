@@ -24,8 +24,7 @@ def read_posts(db: Session = Depends(get_db), current_user: int = Depends(oauth2
 def create_post(post: schemas.PostCreate, db: Session = Depends(get_db), 
                    current_user: int = Depends(oauth2.get_current_user)):
     print(current_user.email)
-    new_post = models.Post(title=post.title, content=post.content, category_id=post.category_id, published=post.published)
-    new_post.user_id = current_user.id
+    new_post = models.Post(title=post.title, content=post.content, user_id=current_user.id, category_id=post.category_id, published=post.published)
     db.add(new_post)
     db.commit()
     db.refresh(new_post)
@@ -48,6 +47,8 @@ def update_post(id: int, post: schemas.PostCreate, db: Session = Depends(get_db)
     if not db_post.first():
         raise HTTPException(status_code=404, detail="Post not found")
     else:
+        if db_post.first().user_id != current_user.id:
+            raise HTTPException(status_code=403, detail="Not authorized to perform requested action")
         db_post.update(post.dict())
         db.commit()
         return post
@@ -58,6 +59,8 @@ def delete_post(id: int, db: Session = Depends(get_db), current_user: int = Depe
     if db_post.first() == None:
         raise HTTPException(status_code=404, detail="Post not found")
     else:
+        if db_post.first().user_id != current_user.id:
+            raise HTTPException(status_code=403, detail="Not authorized to perform requested action")
         db_post.delete()
         db.commit()
         return Response(status_code=status.HTTP_204_NO_CONTENT)
