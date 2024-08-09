@@ -13,10 +13,9 @@ router = APIRouter(
 )
 
 
-
 @router.get("/", response_model=list[schemas.Post])
 def read_posts(db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
-    posts = db.query(models.Post).all()
+    posts = db.query(models.Post).filter(models.Post.user_id == current_user.id).all()
     print(current_user.email)
     return posts
 
@@ -25,7 +24,8 @@ def read_posts(db: Session = Depends(get_db), current_user: int = Depends(oauth2
 def create_post(post: schemas.PostCreate, db: Session = Depends(get_db), 
                    current_user: int = Depends(oauth2.get_current_user)):
     print(current_user.email)
-    new_post = models.Post(title=post.title, content=post.content, user_id=post.user_id, category_id=post.category_id, published=post.published)
+    new_post = models.Post(title=post.title, content=post.content, category_id=post.category_id, published=post.published)
+    new_post.user_id = current_user.id
     db.add(new_post)
     db.commit()
     db.refresh(new_post)

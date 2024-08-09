@@ -1,6 +1,6 @@
 from .database import Base
 
-from sqlalchemy import TIMESTAMP, Boolean, Column, Integer, String, func
+from sqlalchemy import TIMESTAMP, Boolean, Column, ForeignKey, Integer, String, func
 
 
 class Post(Base):
@@ -9,7 +9,7 @@ class Post(Base):
     id = Column(Integer, primary_key=True)
     title = Column(String)
     content = Column(String)
-    user_id = Column(Integer)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     category_id = Column(Integer)
     published = Column(Boolean, default=True)
     #created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=func.now())

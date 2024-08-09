@@ -5,7 +5,6 @@ from typing import Optional
 class PostBase(BaseModel):
     title: str
     content: str
-    user_id: int
     category_id: int
     published: bool = True
 
@@ -15,6 +14,7 @@ class PostCreate(PostBase):
 
 class Post(PostBase):
     id: int
+    user_id: int
 
     class Config:
         orm_mode = True
