@@ -3,8 +3,8 @@ from .database import Base
 from sqlalchemy import TIMESTAMP, Boolean, Column, Integer, String, func
 
 
-class Article(Base):
-    __tablename__ = "articles"
+class Post(Base):
+    __tablename__ = "posts"
 
     id = Column(Integer, primary_key=True)
     title = Column(String)

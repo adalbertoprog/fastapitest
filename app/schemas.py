@@ -2,18 +2,18 @@ from pydantic import BaseModel, EmailStr
 from typing import Optional
 
 
-class ArticleBase(BaseModel):
+class PostBase(BaseModel):
     title: str
     content: str
     user_id: int
     category_id: int
     published: bool = True
 
-class ArticleCreate(ArticleBase):
+class PostCreate(PostBase):
     pass
 
 
-class Article(ArticleBase):
+class Post(PostBase):
     id: int
 
     class Config:
