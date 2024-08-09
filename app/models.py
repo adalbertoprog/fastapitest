@@ -1,6 +1,7 @@
 from .database import Base
 
 from sqlalchemy import TIMESTAMP, Boolean, Column, ForeignKey, Integer, String, func
+from sqlalchemy.orm import relationship
 
 
 class Post(Base):
@@ -14,13 +15,7 @@ class Post(Base):
     published = Column(Boolean, default=True)
     #created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=func.now())
 
-class Category(Base):
-    __tablename__ = "categories"
-
-    id = Column(Integer, primary_key=True)
-    name = Column(String)
-    description = Column(String, nullable=True)
-    #created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=func.now())
+    user = relationship("User")    
 
 class User(Base):
     __tablename__ = "users"

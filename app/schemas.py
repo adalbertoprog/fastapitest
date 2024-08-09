@@ -2,42 +2,6 @@ from pydantic import BaseModel, EmailStr
 from typing import Optional
 
 
-class PostBase(BaseModel):
-    title: str
-    content: str
-    category_id: int
-    published: bool = True
-
-class PostCreate(PostBase):
-    pass
-
-
-class Post(PostBase):
-    id: int
-    user_id: int
-
-    class Config:
-        orm_mode = True
-
-###############################################3
-
-class CategoryBase(BaseModel):
-    name: str
-    description: Optional[str]
-    
-
-class CategoryCreate(CategoryBase):
-    pass
-
-
-class Category(CategoryBase):
-    id: int
-
-    class Config:
-        orm_mode = True
-
-##################################################
-
 class UserBase(BaseModel):
     name: str
     email: EmailStr
@@ -59,6 +23,27 @@ class User(BaseModel):
 class UserLogin(BaseModel):
     email: EmailStr
     password: str
+
+####################################################33
+class PostBase(BaseModel):
+    title: str
+    content: str
+    published: bool = True
+
+class PostCreate(PostBase):
+    pass
+
+
+class Post(PostBase):
+    id: int
+    user_id: int
+    user: User
+
+    class Config:
+        orm_mode = True
+
+
+##################################################
 
 class Token(BaseModel):
     access_token: str
