@@ -24,7 +24,7 @@ def read_posts(db: Session = Depends(get_db), current_user: int = Depends(oauth2
 def create_post(post: schemas.PostCreate, db: Session = Depends(get_db), 
                    current_user: int = Depends(oauth2.get_current_user)):
     print(current_user.email)
-    new_post = models.Post(title=post.title, content=post.content, user_id=current_user.id, category_id=post.category_id, published=post.published)
+    new_post = models.Post(title=post.title, content=post.content, user_id=current_user.id, published=post.published)
     db.add(new_post)
     db.commit()
     db.refresh(new_post)

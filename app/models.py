@@ -11,7 +11,6 @@ class Post(Base):
     title = Column(String)
     content = Column(String)
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
-    category_id = Column(Integer)
     published = Column(Boolean, default=True)
     #created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=func.now())
 
