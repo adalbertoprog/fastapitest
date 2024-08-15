@@ -10,9 +10,10 @@ class Post(Base):
     id = Column(Integer, primary_key=True)
     title = Column(String)
     content = Column(String)
+    tost = Column(String)
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     published = Column(Boolean, default=True)
-    #created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=func.now())
+    
 
     user = relationship("User")    
 
@@ -23,4 +24,5 @@ class User(Base):
     name = Column(String)
     email = Column(String, unique=True)
     password = Column(String)
+    address = Column(String)
     created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=func.now())
